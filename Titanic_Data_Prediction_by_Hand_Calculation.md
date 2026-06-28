@@ -49,6 +49,9 @@ The training dataset contains 891 passengers. Let us examine the first 5 rows, w
 
 These five observations will be used throughout Section 3 to demonstrate manual calculations.
 
+![Distribution of all numerical features in the Titanic dataset](images/Data_Study_img1.png)
+*Figure 1: Global histograms of all numerical variables. Age shows approximate symmetry; Fare, SibSp, and Parch exhibit strong right skew.*
+
 ---
 
 ## 3. Exploratory Data Analysis: Manual Computations
@@ -99,6 +102,9 @@ $$\text{Missing\%} = 0.00224467 \times 100\% = 0.224\%$$
 | Cabin | 687 | 77.104% |
 | Age | 177 | 19.865% |
 | Embarked | 2 | 0.224% |
+
+![Individual distribution plots with kernel density estimation](images/Data_Study_img2.png)
+*Figure 2: Kernel density estimates for Age, Fare, SibSp, and Parch. The skewness values computed in Section 3.3 are visually confirmed by the elongated tails.*
 
 ### 3.2 Descriptive Statistics: Manual Calculation
 
@@ -328,6 +334,9 @@ $$g_{1,\text{log}} = 0.001126 \times 350.214 = 0.394$$
 
 **Result:** Skewness reduced from 4.787 to 0.394 — a 91.8% reduction. The distribution is now approximately symmetric.
 
+![Comparison of original and log-transformed Fare distributions](images/Data_Study_img3.png)
+*Figure 3: Side-by-side comparison of original Fare (highly right-skewed, $g_1 = 4.787$) and log-transformed Fare ($g_1 = 0.394$). The transformation produces a near-bell-shaped curve.*
+
 ---
 
 ### 3.5 Categorical Survival Rates: Manual Calculation
@@ -354,6 +363,9 @@ $$\text{Survival Rate}_{\text{Male}} = 18.89\%$$
 
 **Odds ratio:** $\frac{0.7420}{0.1889} = 3.928$. Females had approximately 3.93 times the odds of survival compared to males.
 
+![Survival rates by Sex, Pclass, and Embarkation port](images/Data_Study_img4.png)
+*Figure 4: Bar plots of survival probability categorized by Sex, Passenger Class, and Embarkation Port. The gender gap is the most pronounced effect.*
+
 #### 3.5.2 Survival Rate by Passenger Class
 
 | Class | Total | Survived | Fraction | Percentage |
@@ -379,6 +391,9 @@ $0.6296...$
 $168 \times 0.55 = 92.4$; remainder $0.6$
 $168 \times 0.004 = 0.672$; remainder $-0.072$
 $0.5536...$
+
+![Multivariate analysis: Survival rate by Passenger Class and Sex combined](images/Data_Study_img5.png)
+*Figure 5: Point plot showing the interaction between Pclass and Sex. First- and second-class females approached 95-100% survival, while third-class males fell below 15%.*
 
 ---
 
@@ -458,6 +473,9 @@ $$r = -0.035$$ (negligible linear relationship)
 
 $$r = +0.082$$ (weak positive: having parents/children aboard slightly increases survival chance)
 
+![Correlation heatmap of numerical features](images/Data_Study_img6.png)
+*Figure 6: Pearson correlation heatmap. Survived shows strongest correlation with Pclass ($r = -0.34$), followed by Fare ($r = +0.26$) and Sex (implicit in the categorical encoding).*
+
 ---
 
 ### 3.7 Feature Engineering: Mathematical Derivations
@@ -518,6 +536,9 @@ Final title distribution:
 - Mrs: 126 passengers (14.1%)
 - Master: 40 passengers (4.5%)
 - Rare: 23 passengers (2.6%)
+
+![Survival rate by passenger title](images/Data_Study_img7.png)
+*Figure 7: Survival probability by extracted Title. Mrs and Miss exceed 70%, Master (young boys) reaches ~58%, while Mr (adult males) falls below 20%.*
 
 ---
 
@@ -771,6 +792,9 @@ The tree would continue splitting recursively at each child node until `max_dept
 
 Mean CV accuracy: 81.26% with standard deviation 0.0194.
 
+![Cross-validation model comparison](images/Titanic_ML_img1.png)
+*Figure 8: Model performance comparison via 5-fold cross-validation. Top panel: mean accuracy with standard deviation error bars. Bottom panel: box plots showing per-fold score distributions. Gradient Boosting achieves the highest mean accuracy (83.84%).*
+
 ---
 
 ### 5.4 Model 3: Random Forest
@@ -819,7 +843,7 @@ where:
 #### 5.5.2 Pseudo-Residuals
 
 For binary classification with log-loss, the pseudo-residual at iteration $m$ for observation $i$ is:
-$$r_{im} = -\left[\frac{\partial \mathcal{L}(y_i, F(x_i))}{\partial F(x_i)}\right]_{F(x) = F_{m-1}(x)}$$
+$$r_{im} = -\left.\frac{\partial \mathcal{L}(y_i, F(x_i))}{\partial F(x_i)}\right|_{F(x)=F_{m-1}(x)}$$
 
 For the log-loss $\mathcal{L}(y, p) = -[y\ln(p) + (1-y)\ln(1-p)]$ where $p = \sigma(F(x))$:
 
@@ -1052,6 +1076,9 @@ The model outputs predicted probabilities. Sorting all 179 validation prediction
 $$\text{AUC} = \int_{0}^{1} \text{TPR}(t) \, d(\text{FPR}(t))$$
 
 For our model, $\text{AUC} = 0.890$, which indicates excellent discrimination (random classifier has AUC = 0.5, perfect classifier has AUC = 1.0).
+
+![Confusion matrix and ROC curve for the optimized Gradient Boosting model](images/Titanic_ML_img2.png)
+*Figure 9: Final evaluation on the validation split (20% holdout). Left: confusion matrix showing 143 correct and 36 incorrect predictions. Right: ROC curve with AUC = 0.890, well above the random baseline (dashed diagonal).*
 
 ---
 
